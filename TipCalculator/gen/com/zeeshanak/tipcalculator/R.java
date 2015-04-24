@@ -28,7 +28,7 @@ public final class R {
     }
     public static final class id {
         public static final int GridLayout1=0x7f080000;
-        public static final int action_settings=0x7f08000f;
+        public static final int action_settings=0x7f080011;
         public static final int amountDisplayTextView=0x7f080003;
         public static final int amountEditText=0x7f080002;
         public static final int amountTextView=0x7f080001;
@@ -41,7 +41,9 @@ public final class R {
         public static final int tipCustomTextView=0x7f08000c;
         public static final int tipLinearLayout=0x7f08000a;
         public static final int tipTextView=0x7f080009;
-        public static final int totalCustomTextView=0x7f08000e;
+        public static final int total15TextView=0x7f08000f;
+        public static final int totalCustomTextView=0x7f080010;
+        public static final int totalLinearLayout=0x7f08000e;
         public static final int totalTextView=0x7f08000d;
     }
     public static final class layout {
