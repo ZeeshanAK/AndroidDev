@@ -29,11 +29,9 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		
-		
-		ringer = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
+		//Displaying current Ringer mode on the phone
+		ringer = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		TextView textRinger = (TextView) findViewById(R.id.getRinger);
 		int currentRinger = ringer.getRingerMode();		
 		switch (currentRinger)
@@ -49,8 +47,6 @@ public class MainActivity extends Activity {
 				break;
 				default:
 					textRinger.setText("Cannot read ringer mode from settings!");
-				
-				
 		}
 		
 		
@@ -62,14 +58,13 @@ public class MainActivity extends Activity {
 
 		
 		Button setButton = (Button) findViewById(R.id.setAlarm);
-		
 		setButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				
-				EditText startTime = (EditText) findViewById(R.id.getStartTime);
-				EditText endTime = (EditText) findViewById(R.id.getEndTime);
+				EditText startTime = (EditText) findViewById(R.id.takeStartTime);
+				EditText endTime = (EditText) findViewById(R.id.takeEndTime);
 				
 				int start = Integer.decode(startTime.getText().toString());
 				int end = Integer.decode(endTime.getText().toString());
@@ -84,9 +79,6 @@ public class MainActivity extends Activity {
 		        Toast.makeText(MainActivity.this, "Alarm Set", Toast.LENGTH_SHORT).show();				
 			}
 		});
-		
-		
-		
 	}
 	
 

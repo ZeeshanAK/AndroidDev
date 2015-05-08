@@ -18,14 +18,11 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/getStartTime"
+        android:id="@+id/takeStartTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="time" >
-
-        <requestFocus />
-    </EditText>
+        android:inputType="time" />
 
     <TextView
         android:id="@+id/endTimeTextView"
@@ -35,11 +32,14 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/getEndTime"
+        android:id="@+id/takeEndTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="time" />
+        android:inputType="time" >
+
+        <requestFocus />
+    </EditText>
 
     <Button
         android:id="@+id/setAlarm"
