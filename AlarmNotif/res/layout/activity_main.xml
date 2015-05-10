@@ -18,11 +18,14 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/takeStartTime"
-        android:layout_width="match_parent"
+        android:id="@+id/startTime"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="time" />
+        android:inputType="time"
+        android:onClick="showTimePickerDialog" >
+
+    </EditText>
 
     <TextView
         android:id="@+id/endTimeTextView"
@@ -32,14 +35,11 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/takeEndTime"
-        android:layout_width="match_parent"
+        android:id="@+id/endTime"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="time" >
-
-        <requestFocus />
-    </EditText>
+        android:inputType="time" />
 
     <Button
         android:id="@+id/setAlarm"
@@ -48,11 +48,26 @@
         android:gravity="center_vertical"
         android:text="@string/set_alarm" />
 
-    <TextView
-        android:id="@+id/getRinger"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ringer_mode"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="@string/ringer_mode"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/getRinger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="@string/ringer_mode"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
 
 </LinearLayout>
