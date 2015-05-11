@@ -38,12 +38,10 @@ public class MainActivity extends Activity {
 		//Displaying current Ringer mode on the phone
 		ringerMode();
 
-
+		//Populate the start and end time fields with current time
 		final EditText startTime = (EditText) findViewById(R.id.startTime);
 		final EditText endTime = (EditText) findViewById(R.id.endTime);
-		//Populate the start and end time fields with current time
 		populateFields(startTime, endTime);
-		
 		
 		
 		
@@ -136,27 +134,39 @@ public class MainActivity extends Activity {
 	
 	//Class to implement timePicker dialog fragment
 	public class TimePickerFragment extends DialogFragment
-			    implements TimePickerDialog.OnTimeSetListener 
+	implements TimePickerDialog.OnTimeSetListener 
 	{
-			
-			@Override
-			public Dialog onCreateDialog(Bundle savedInstanceState) {
-			// Use the current time as the default values for the picker
-			final Calendar c = Calendar.getInstance();
-			int hour = c.get(Calendar.HOUR_OF_DAY);
-			int minute = c.get(Calendar.MINUTE);
-		//	int amPM = c.get(Calendar.AM_PM);
-			
-				// Create a new instance of TimePickerDialog and return it
-				return new TimePickerDialog(getActivity(), this, hour, minute,
-				DateFormat.is24HourFormat(getActivity()));
-				}	
-			
-				public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
-				{
-					final EditText startTime = (EditText) findViewById(R.id.startTime);
-
-					((TextView) startTime).setText(String.valueOf(hourOfDay) + ": " + String.valueOf(minute));
-				}
+		
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+		// Use the current time as the default values for the picker
+		final Calendar c = Calendar.getInstance();
+		int hour = c.get(Calendar.HOUR_OF_DAY);
+		int minute = c.get(Calendar.MINUTE);
+	
+		// Create a new instance of TimePickerDialog and return it
+		return new TimePickerDialog(getActivity(), this, hour, minute,
+		DateFormat.is24HourFormat(getActivity()));
+		}	
+	
+		public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
+		{
+		String amPM = "";
+		if(hourOfDay < 12) {
+			amPM = " AM";
+		} else {
+			amPM = " PM";
+		}
+	
+		final EditText startTime = (EditText) findViewById(R.id.startTime);
+		((TextView) startTime).setText(String.valueOf(hourOfDay) + ": " + String.valueOf(minute) + amPM);
+	
+		final EditText endTime = (EditText) findViewById(R.id.endTime);
+		((TextView) endTime).setText(String.valueOf(hourOfDay) + ": " + String.valueOf(minute) + amPM);
+		}
 	}
+
 }
+
+
+
