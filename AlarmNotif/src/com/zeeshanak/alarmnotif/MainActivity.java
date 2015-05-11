@@ -74,10 +74,12 @@ public class MainActivity extends Activity {
 
 	}
 	
-	public void showTimePickerDialog(View v) {
+	public void showTimePickerDialogStart(View v) {
 	    DialogFragment newFragment = new TimePickerFragment();
-	    newFragment.show(getFragmentManager(), "timePicker");
+	    newFragment.show(getFragmentManager(), "timePickerStart");
 	}
+	
+	
 	
 	
 	public void ringerMode ()
@@ -108,6 +110,8 @@ public class MainActivity extends Activity {
 		((TextView) startTime).setText(String.valueOf(hr) + ": " + String.valueOf(mnt) 
 				+ (ap == 0 ? " AM": " PM"));
 		
+		//Need to fix this, if startTime is 59 it shows 64 for the minutes here, which is wrong. 
+		//Minutes should not exceed 59
 		((TextView) endTime).setText(String.valueOf(hr) + ": " + String.valueOf(mnt + 5) 
 				+ (ap == 0 ? " AM": " PM"));
 	}
@@ -157,12 +161,19 @@ public class MainActivity extends Activity {
 		} else {
 			amPM = " PM";
 		}
-	
-		final EditText startTime = (EditText) findViewById(R.id.startTime);
-		((TextView) startTime).setText(String.valueOf(hourOfDay) + ": " + String.valueOf(minute) + amPM);
-	
-		final EditText endTime = (EditText) findViewById(R.id.endTime);
-		((TextView) endTime).setText(String.valueOf(hourOfDay) + ": " + String.valueOf(minute) + amPM);
+		
+		//For some reason the following code sets the Start and End time both to the same value
+		//Tried to put the if logic below but it's not working. 
+		
+		//if (view == findViewById(R.id.startTime))
+				{
+						final EditText startTime = (EditText) findViewById(R.id.startTime);
+						((TextView) startTime).setText(hourOfDay + ": " + minute + amPM);
+				} //else 
+					{
+						final EditText endTime = (EditText) findViewById(R.id.endTime);
+						((TextView) endTime).setText(hourOfDay + ": " + minute + amPM);
+					}
 		}
 	}
 
