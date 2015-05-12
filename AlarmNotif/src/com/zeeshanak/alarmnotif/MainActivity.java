@@ -27,6 +27,7 @@ public class MainActivity extends Activity {
 	private AlarmManager alarmMgr;
 	private PendingIntent alarmIntent;
 	private AudioManager ringer;
+	private static String whichTextView;
 	
 
 	@Override
@@ -57,28 +58,51 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
+				String startTextString = startTime.getText().toString();
+				String[] time = startTextString.split(":");
+				String hrStartString = time[0];
+				String mnStartStringAM = time[1];
+				String[] mnStartStringWithoutAM = mnStartStringAM.split(" ");
+				String mnStartString = mnStartStringWithoutAM[0];
 				
-				int start = Integer.decode(startTime.getText().toString());
-				int end = Integer.decode(endTime.getText().toString());
+				int startHR = Integer.parseInt(hrStartString);
+				int startMNT = Integer.parseInt(mnStartString);
 
-				// Set the alarm
+				 //Set the alarm
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTimeInMillis(System.currentTimeMillis());
-				calendar.set(Calendar.HOUR_OF_DAY, start);
-				calendar.set(Calendar.MINUTE, end);
+				calendar.set(Calendar.HOUR_OF_DAY, startHR);
+				calendar.set(Calendar.MINUTE, startMNT);
 				
 				alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-		        Toast.makeText(MainActivity.this, "Alarm Set", Toast.LENGTH_SHORT).show();				
+		        Toast.makeText(MainActivity.this, "Alarm Set " + mnStartString, Toast.LENGTH_LONG).show();				
 			}
 		});
 
+		
+		startTime.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) 
+			{
+				whichTextView = "startTime";
+				DialogFragment newFragment = new TimePickerFragment();
+			    newFragment.show(getFragmentManager(), "timePickerStart");				
+			}
+		});
+		
+		endTime.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) 
+			{
+				whichTextView = "endTime";
+				DialogFragment newFragment = new TimePickerFragment();
+			    newFragment.show(getFragmentManager(), "timePickerStart");					
+			}
+		});
+		
 	}
-	
-	public void showTimePickerDialogStart(View v) {
-	    DialogFragment newFragment = new TimePickerFragment();
-	    newFragment.show(getFragmentManager(), "timePickerStart");
-	}
-	
 	
 	
 	
@@ -105,15 +129,23 @@ public class MainActivity extends Activity {
 		Calendar mCal = Calendar.getInstance();
 		int hr = mCal.get(Calendar.HOUR_OF_DAY);
 		int mnt = mCal.get(Calendar.MINUTE);
-		int ap = mCal.get(Calendar.AM);
+		String amPM = "";
+		if(hr < 12) {
+			amPM = " AM";
+		} else {
+			amPM = " PM";
+		}
 		
-		((TextView) startTime).setText(String.valueOf(hr) + ": " + String.valueOf(mnt) 
-				+ (ap == 0 ? " AM": " PM"));
+		if (hr > 12)
+		{
+			hr = hr - 12;
+		}
 		
-		//Need to fix this, if startTime is 59 it shows 64 for the minutes here, which is wrong. 
-		//Minutes should not exceed 59
-		((TextView) endTime).setText(String.valueOf(hr) + ": " + String.valueOf(mnt + 5) 
-				+ (ap == 0 ? " AM": " PM"));
+		((TextView) startTime).setText(String.format("%02d",hr) + ":" + String.format("%02d", mnt) 
+				+ amPM);
+		
+		((TextView) endTime).setText(String.format("%02d", hr + 1) + ":" + String.format("%02d", mnt) 
+				+amPM);
 	}
 	
 	@Override
@@ -149,31 +181,35 @@ public class MainActivity extends Activity {
 		int minute = c.get(Calendar.MINUTE);
 	
 		// Create a new instance of TimePickerDialog and return it
-		return new TimePickerDialog(getActivity(), this, hour, minute,
-		DateFormat.is24HourFormat(getActivity()));
+		return new TimePickerDialog(getActivity(), this, hour, minute, 
+				DateFormat.is24HourFormat(getActivity()));
 		}	
 	
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
 		{
-		String amPM = "";
-		if(hourOfDay < 12) {
-			amPM = " AM";
-		} else {
-			amPM = " PM";
-		}
-		
-		//For some reason the following code sets the Start and End time both to the same value
-		//Tried to put the if logic below but it's not working. 
-		
-		//if (view == findViewById(R.id.startTime))
+									
+			String amPM = "";
+			if(hourOfDay < 12) {
+				amPM = " AM";
+			} else {
+				amPM = " PM";
+			}
+			
+			if (hourOfDay > 12)
+			{
+				hourOfDay = hourOfDay - 12;
+			}
+	
+			if (whichTextView.equals("startTime"))
 				{
-						final EditText startTime = (EditText) findViewById(R.id.startTime);
-						((TextView) startTime).setText(hourOfDay + ": " + minute + amPM);
-				} //else 
-					{
-						final EditText endTime = (EditText) findViewById(R.id.endTime);
-						((TextView) endTime).setText(hourOfDay + ": " + minute + amPM);
-					}
+					final EditText startTime = (EditText) findViewById(R.id.startTime);
+					((TextView) startTime).setText(String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute) + amPM);
+				} 
+			else 
+				{
+					final EditText endTime = (EditText) findViewById(R.id.endTime);
+					((TextView) endTime).setText(String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute) + amPM);
+				}
 		}
 	}
 
