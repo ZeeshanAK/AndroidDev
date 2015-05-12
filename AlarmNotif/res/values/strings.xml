@@ -8,6 +8,13 @@
     <string name="start_time">Start Time</string>
     <string name="end_time">End Time</string>
     <string name="set_alarm">Set Alarm</string>
-    <string name="ringer_mode">Ringer Mode</string>
+    <string name="ringer_mode">Current Mode</string>
+    <string name="set_mode">Set Mode</string>
+    
+        <string-array name="ringer_modes">
+	        <item>Normal</item>
+	        <item>Silent</item>
+	        <item>Vibrate</item>
+        </string-array>
 
 </resources>
