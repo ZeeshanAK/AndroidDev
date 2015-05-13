@@ -17,10 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -29,10 +28,11 @@ public class MainActivity extends Activity {
 	private AlarmManager alarmMgr;
 	private PendingIntent alarmIntent;
 	private AudioManager ringer;
-	private static String whichTextView;
 	private EditText startTime;
 	private EditText endTime; 
 	private Button setButton;
+	private static String whichTextView;
+	private static String setRingerMode;
 	 
 	
 	@Override
@@ -86,21 +86,30 @@ public class MainActivity extends Activity {
 				setStartTime();
 			}
 		});
-		
-		
-		Spinner spinner = (Spinner) findViewById(R.id.spinner);
-		// Create an ArrayAdapter using the string array and a default spinner layout
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-		        R.array.ringer_modes, android.R.layout.simple_spinner_item);
-		// Specify the layout to use when the list of choices appears
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// Apply the adapter to the spinner
-		spinner.setAdapter(adapter);
-		
-		
 	}
 	
 	
+	
+	public void onRadioButtonClicked(View view) {
+	    // Is the button now checked?
+	    boolean checked = ((RadioButton) view).isChecked();
+	    
+	    // Check which radio button was clicked
+	    switch(view.getId()) {
+	        case R.id.radio_normal:
+	            if (checked)
+	            	setRingerMode = "Normal";
+	            break;
+	        case R.id.radio_vibrate:
+	            if (checked)
+	            	setRingerMode = "Vibrate";
+	            break;
+	        case R.id.radio_silent:
+	            if (checked)
+	            	setRingerMode = "Silent";
+	            break;
+	    }
+	}
 	
 	public void ringerMode ()
 	{
@@ -172,6 +181,7 @@ public class MainActivity extends Activity {
 	{
 		alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 		Intent intent = new Intent(MainActivity.this, AlarmReciever.class);
+		intent.putExtra("setRingerMode",setRingerMode );
 		alarmIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
 
 		//We receive the string as "12:12 AM", so splitting it to get the HR first 
