@@ -33,7 +33,8 @@ public class MainActivity extends Activity {
 	private Button setButton;
 	private static String whichTextView;
 	private static String setRingerMode;
-	 
+	private static String revRingerMode;
+	private int currentRinger; 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -84,6 +85,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) 
 			{
 				setStartTime();
+				setEndTime();
 			}
 		});
 	}
@@ -115,14 +117,17 @@ public class MainActivity extends Activity {
 	{
 		ringer = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		TextView textRinger = (TextView) findViewById(R.id.getRinger);
-		int currentRinger = ringer.getRingerMode();		
+		currentRinger = ringer.getRingerMode();		
 		switch (currentRinger)
 		{
 			case 0: textRinger.setText("Silent");
+					revRingerMode = "Silent";
 				break;
 			case 1: textRinger.setText("Vibrate");
+					revRingerMode = "Vibrate";
 				break;
 			case 2: textRinger.setText("Normal");
+					revRingerMode = "Normal";
 				break;
 			default: textRinger.setText("Cannot read ringer mode from settings!");
 		}
@@ -204,7 +209,37 @@ public class MainActivity extends Activity {
 		calendar.set(Calendar.MINUTE, startMNT);
 		
 		alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-        Toast.makeText(MainActivity.this, "Alarm Set " + mnStartString, Toast.LENGTH_LONG).show();	
+        Toast.makeText(MainActivity.this, "Alarm Set for " + hrStartString + ":" + mnStartString, Toast.LENGTH_LONG).show();	
+	}
+
+	public void setEndTime()
+	{
+		alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+		Intent endIntent = new Intent(MainActivity.this, AlarmReciever.class);
+		endIntent.putExtra("setRingerMode",revRingerMode );
+		alarmIntent = PendingIntent.getBroadcast(MainActivity.this, 0, endIntent, 0);
+
+		//We receive the string as "12:12 AM", so splitting it to get the HR first 
+		String endTextString = endTime.getText().toString();
+		String[] getHR = endTextString.split(":");
+		String hrEndString = getHR[0];
+		String mnEndStringAM = getHR[1];
+		
+		//Split the second portion to drop the AM from the second part
+		String[] getMN = mnEndStringAM.split(" ");
+		String mnEndString = getMN[0];
+		
+		int endHR = Integer.parseInt(hrEndString);
+		int endMNT = Integer.parseInt(mnEndString);
+
+		 //Set the alarm
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		calendar.set(Calendar.HOUR_OF_DAY, endHR);
+		calendar.set(Calendar.MINUTE, endMNT);
+		
+		alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+        Toast.makeText(MainActivity.this, "Alarm will end at " + hrEndString + ":" + mnEndString, Toast.LENGTH_LONG).show();	
 	}
 	
 	//Class to implement timePicker dialog fragment

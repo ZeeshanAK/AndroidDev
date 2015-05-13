@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
 
 public class AlarmReciever extends BroadcastReceiver 
 {
@@ -19,15 +18,14 @@ public class AlarmReciever extends BroadcastReceiver
 	public void onReceive(Context context, Intent intent) {
 		
 		Bundle extraMsg = intent.getExtras();
+				
 		String setRingerModeRec = extraMsg.getString("setRingerMode");
 		
-        Toast.makeText(context, setRingerModeRec, Toast.LENGTH_LONG).show();
-        
-               	
+		
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
         mBuilder.setSmallIcon(R.drawable.ic_launcher);
-        mBuilder.setContentTitle("Notification Alert, Click Me!");
-        mBuilder.setContentText("Mute activated for the time: !" );
+        mBuilder.setContentTitle("Profile Activated!");
+        mBuilder.setContentText("Changed Ringer Mode to: " + setRingerModeRec );
 
         NotificationManager mNotificationManager =
         	    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
