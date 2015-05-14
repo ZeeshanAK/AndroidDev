@@ -26,9 +26,14 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private AlarmManager alarmMgr;
+	private AlarmManager alarmMgrEnd;
+
 	private PendingIntent alarmIntent;
+	private PendingIntent alarmIntentEnd;
+
 	private AudioManager ringer;
 	private EditText startTime;
+	private EditText startTimeSelected;
 	private EditText endTime; 
 	private Button setButton;
 	private static String whichTextView;
@@ -44,6 +49,7 @@ public class MainActivity extends Activity {
 
 		//Get required views
 		startTime = (EditText) findViewById(R.id.startTime);
+		startTimeSelected =(EditText) findViewById(R.id.startTimeSelected ); 
 		endTime = (EditText) findViewById(R.id.endTime);
 		setButton = (Button) findViewById(R.id.setAlarm);
 
@@ -85,7 +91,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) 
 			{
 				setStartTime();
-				setEndTime();
+				//setEndTime();
 			}
 		});
 	}
@@ -192,14 +198,17 @@ public class MainActivity extends Activity {
 		//We receive the string as "12:12 AM", so splitting it to get the HR first 
 		String startTextString = startTime.getText().toString();
 		String[] getHR = startTextString.split(":");
-		String hrStartString = getHR[0];
+		String hrStartString = getHR[0]; //Hour selected by user
 		String mnStartStringAM = getHR[1];
 		
 		//Split the second portion to drop the AM from the second part
 		String[] getMN = mnStartStringAM.split(" ");
-		String mnStartString = getMN[0];
+		String mnStartString = getMN[0]; //Min selected by used
 		
-		int startHR = Integer.parseInt(hrStartString);
+		//getting hourOfDay from startTimeSelected
+		String startTimeSelectedStr = startTimeSelected.getText().toString();
+		
+		int startHR = Integer.parseInt(startTimeSelectedStr);
 		int startMNT = Integer.parseInt(mnStartString);
 
 		 //Set the alarm
@@ -209,15 +218,15 @@ public class MainActivity extends Activity {
 		calendar.set(Calendar.MINUTE, startMNT);
 		
 		alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-        Toast.makeText(MainActivity.this, "Alarm Set for " + hrStartString + ":" + mnStartString, Toast.LENGTH_LONG).show();	
+        Toast.makeText(MainActivity.this, "Alarm Set for " + startTimeSelectedStr + ":" + mnStartString, Toast.LENGTH_LONG).show();	
 	}
 
 	public void setEndTime()
 	{
-		alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+		alarmMgrEnd = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 		Intent endIntent = new Intent(MainActivity.this, AlarmReciever.class);
 		endIntent.putExtra("setRingerMode",revRingerMode );
-		alarmIntent = PendingIntent.getBroadcast(MainActivity.this, 0, endIntent, 0);
+		alarmIntentEnd = PendingIntent.getBroadcast(MainActivity.this, 0, endIntent, 0);
 
 		//We receive the string as "12:12 AM", so splitting it to get the HR first 
 		String endTextString = endTime.getText().toString();
@@ -238,7 +247,7 @@ public class MainActivity extends Activity {
 		calendar.set(Calendar.HOUR_OF_DAY, endHR);
 		calendar.set(Calendar.MINUTE, endMNT);
 		
-		alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+		alarmMgrEnd.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntentEnd);
         Toast.makeText(MainActivity.this, "Alarm will end at " + hrEndString + ":" + mnEndString, Toast.LENGTH_LONG).show();	
 	}
 	
@@ -261,6 +270,11 @@ public class MainActivity extends Activity {
 	
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
 		{
+			
+			//setting just the hourofDay to this hidden field because the following conversion from 
+			//24hrs to 12hr seems to be messing the Alarm.
+			final EditText startTimeSelected = (EditText) findViewById(R.id.startTimeSelected);
+			((TextView) startTimeSelected).setText(String.valueOf(hourOfDay));
 									
 			String amPM = "";
 			if(hourOfDay < 12) {

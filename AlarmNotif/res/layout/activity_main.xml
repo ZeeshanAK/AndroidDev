@@ -25,6 +25,16 @@
         android:inputType="time" >
     </EditText>
 
+    <EditText
+        android:id="@+id/startTimeSelected"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        
+        android:inputType="time" >
+
+        <requestFocus />
+    </EditText>
+
     <TextView
         android:id="@+id/endTimeTextView"
         android:layout_width="wrap_content"
