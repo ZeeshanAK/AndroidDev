@@ -33,13 +33,16 @@ public class MainActivity extends Activity {
 
 	private AudioManager ringer;
 	private EditText startTime;
-	private EditText startTimeSelected;
 	private EditText endTime; 
 	private Button setButton;
 	private static String whichTextView;
 	private static String setRingerMode;
 	private static String revRingerMode;
 	private int currentRinger; 
+	
+	
+	private Integer startAlarmHourOfTheDay = 0;
+	private Integer startAlarmMinOfTheDay = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -49,7 +52,6 @@ public class MainActivity extends Activity {
 
 		//Get required views
 		startTime = (EditText) findViewById(R.id.startTime);
-		startTimeSelected =(EditText) findViewById(R.id.startTimeSelected ); 
 		endTime = (EditText) findViewById(R.id.endTime);
 		setButton = (Button) findViewById(R.id.setAlarm);
 
@@ -90,8 +92,9 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) 
 			{
-				setStartTime();
-				setEndTime();
+				
+				setStartTime(startAlarmHourOfTheDay, startAlarmMinOfTheDay);
+			//	setEndTime();
 			}
 		});
 	}
@@ -188,37 +191,21 @@ public class MainActivity extends Activity {
 	}
 	
 	
-	public void setStartTime()
+	public void setStartTime(int startTime, int startMin)
 	{
 		alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 		Intent intent = new Intent(MainActivity.this, AlarmReciever.class);
 		intent.putExtra("setRingerMode",setRingerMode );
 		alarmIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
-
-		//We receive the string as "12:12 AM", so splitting it to get the HR first 
-		String startTextString = startTime.getText().toString();
-		String[] getHR = startTextString.split(":");
-		String hrStartString = getHR[0]; //Hour selected by user
-		String mnStartStringAM = getHR[1];
 		
-		//Split the second portion to drop the AM from the second part
-		String[] getMN = mnStartStringAM.split(" ");
-		String mnStartString = getMN[0]; //Min selected by used
-		
-		//getting hourOfDay from startTimeSelected
-		String startTimeSelectedStr = startTimeSelected.getText().toString();
-		
-		int startHR = Integer.parseInt(startTimeSelectedStr);
-		int startMNT = Integer.parseInt(mnStartString);
-
-		 //Set the alarm
+			 //Set the alarm
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
-		calendar.set(Calendar.HOUR_OF_DAY, startHR);
-		calendar.set(Calendar.MINUTE, startMNT);
+		calendar.set(Calendar.HOUR_OF_DAY, startTime);
+		calendar.set(Calendar.MINUTE, startMin);
 		
 		alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-        Toast.makeText(MainActivity.this, "Alarm Set for " + startTimeSelectedStr + ":" + mnStartString, Toast.LENGTH_LONG).show();	
+        Toast.makeText(MainActivity.this, "Alarm Set for " + startTime + ":" + startMin, Toast.LENGTH_LONG).show();	
 	}
 
 	public void setEndTime()
@@ -275,7 +262,8 @@ public class MainActivity extends Activity {
 			//24hrs to 12hr seems to be messing the Alarm.
 			final EditText startTimeSelected = (EditText) findViewById(R.id.startTimeSelected);
 			((TextView) startTimeSelected).setText(String.valueOf(hourOfDay));
-									
+				startAlarmHourOfTheDay	= hourOfDay;
+				startAlarmMinOfTheDay = minute;
 			String amPM = "";
 			if(hourOfDay < 12) {
 				amPM = " AM";

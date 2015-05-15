@@ -24,12 +24,12 @@
             </intent-filter>
         </activity>
         <receiver android:name=".AlarmReceiver"
-        android:enabled="false">
+        android:enabled="true">
     <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED"></action>
     </intent-filter>
 </receiver>
-        <activity
+        <!-- <activity
             android:name=".AlarmReciever"
             android:label="@string/title_activity_alarm_reciever" >
         </activity>
@@ -40,7 +40,7 @@
     <intent-filter>
         <action android:name="com.zeeshanak.alarmnotif.MainActivityr" />
     </intent-filter>
-</receiver>
+</receiver> -->
     </application>
 
 </manifest>
