@@ -45,17 +45,21 @@
         android:gravity="center"
         android:orientation="horizontal" >
 
-        <Button
+        <ImageButton
             android:id="@+id/prevButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/prev_button" />
+            android:src="@drawable/arrow_left"
+             android:contentDescription="@string/next_button"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/nxtButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/next_button" />
+            android:src="@drawable/arrow_right"
+            android:contentDescription="@string/prev_button"
+            
+            />
     </LinearLayout>
 
 </LinearLayout>

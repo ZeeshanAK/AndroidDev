@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,8 +15,8 @@ public class QuizActivity extends Activity
 {
 	private Button mTrueButton;
 	private Button mFalseButton;
-	private Button mNextButton;
-	private Button mPrevButton;
+	private ImageButton mNextButton;
+	private ImageButton mPrevButton;
 	private TextView mQuestionTextView;
 	
 	private TrueFalse[] mQuestionBank = new TrueFalse[]
@@ -62,7 +63,7 @@ public class QuizActivity extends Activity
 		
 		updateQuestion();
 		
-		mNextButton = (Button) findViewById(R.id.nxtButton);
+		mNextButton = (ImageButton) findViewById(R.id.nxtButton);
 		mNextButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -73,7 +74,7 @@ public class QuizActivity extends Activity
 			}
 		});
 		
-		mPrevButton = (Button) findViewById(R.id.prevButton);
+		mPrevButton = (ImageButton) findViewById(R.id.prevButton);
 		mPrevButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
