@@ -1,11 +1,12 @@
 package com.zeeshanak.geoquiz;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -15,9 +16,13 @@ public class QuizActivity extends Activity
 {
 	private Button mTrueButton;
 	private Button mFalseButton;
+	private Button mCheatButton;
 	private ImageButton mNextButton;
 	private ImageButton mPrevButton;
 	private TextView mQuestionTextView;
+	
+	private static final String KEY_INDEX = "index";
+	private static final String TAG = "QuizActivity";
 	
 	private TrueFalse[] mQuestionBank = new TrueFalse[]
 			{
@@ -61,10 +66,14 @@ public class QuizActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_quiz);
 		
+		if (savedInstanceState != null) {
+			mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+			}
+		
 		updateQuestion();
 		
 		mNextButton = (ImageButton) findViewById(R.id.nxtButton);
-		mNextButton.setOnClickListener(new OnClickListener() {
+		mNextButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) 
@@ -75,17 +84,35 @@ public class QuizActivity extends Activity
 		});
 		
 		mPrevButton = (ImageButton) findViewById(R.id.prevButton);
-		mPrevButton.setOnClickListener(new OnClickListener() {
+		mPrevButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				if(mCurrentIndex == 0)
+				{
+					mCurrentIndex = mQuestionBank.length-1;
+					updateQuestion();				
+				}
 				mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
 				updateQuestion();				
 			}
 		});
 		
+		mCheatButton = (Button) findViewById(R.id.cheat_button);
+		mCheatButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(QuizActivity.this, CheatActivity.class);
+				boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion();
+				i.putExtra(CheatActivity.EXTRA_ANSWER_IS_TRUE, answerIsTrue);
+				startActivityForResult(i, 0);
+			}
+		});
+		
+		
 		mQuestionTextView = (TextView)findViewById(R.id.questionTextView);
-		mQuestionTextView.setOnClickListener(new OnClickListener() {
+		mQuestionTextView.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -95,7 +122,7 @@ public class QuizActivity extends Activity
 		});
 		
 		mTrueButton = (Button) findViewById(R.id.trueButton);
-		mTrueButton.setOnClickListener(new OnClickListener() {
+		mTrueButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -104,7 +131,7 @@ public class QuizActivity extends Activity
 		});
 		
 		mFalseButton = (Button) findViewById(R.id.falseButton);
-		mFalseButton.setOnClickListener(new OnClickListener() {
+		mFalseButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -115,6 +142,13 @@ public class QuizActivity extends Activity
 		
 	}
 
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	super.onSaveInstanceState(savedInstanceState);
+	Log.i(TAG, "onSaveInstanceState");
+	savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
