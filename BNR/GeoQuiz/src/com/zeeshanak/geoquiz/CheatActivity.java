@@ -2,6 +2,7 @@ package com.zeeshanak.geoquiz;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,8 @@ public class CheatActivity extends Activity
 	private Button mShowAnswer;
 	private TextView mAnswerTextView;
 	private boolean mIsCheater = false;
+	private TextView sdkVer;
+	private int buildVer = Build.VERSION.SDK_INT;
 	
 	
 	private void setAnswerisShown ()
@@ -60,6 +63,9 @@ public class CheatActivity extends Activity
 				setAnswerisShown();
 			}
 		});
+		
+		sdkVer = (TextView) findViewById(R.id.sdkVer);
+		sdkVer.setText("API Level: " + buildVer);
 	}
 	
 	@Override

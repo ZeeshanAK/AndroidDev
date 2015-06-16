@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <issue id="ButtonStyle" severity="ignore" />
+    <issue id="NewApi">
+        <ignore path="src/com/zeeshanak/geoquiz/QuizActivity.java" />
+    </issue>
 </lint>
