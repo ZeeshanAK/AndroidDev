@@ -14,16 +14,18 @@ public class CheatActivity extends Activity
 			"com.zeeshanak.geoquiz.answer_is_true";
 	public static final String ANSWER_IS_SHOWN =
 			"com.zeeshanak.geoquiz.answer_is_shown";
+	private static final String KEY_CHEAT = "cheat";
 	
 	private boolean mAnswerIsTrue;
 	private Button mShowAnswer;
 	private TextView mAnswerTextView;
+	private boolean mIsCheater = false;
 	
 	
-	private void setAnswerisShown (boolean isAnswerShown)
+	private void setAnswerisShown ()
 	{
 		Intent data = new Intent();
-		data.putExtra(ANSWER_IS_SHOWN, isAnswerShown);
+		data.putExtra(ANSWER_IS_SHOWN, mIsCheater);
 		setResult(RESULT_OK, data);
 	}
 	
@@ -32,8 +34,12 @@ public class CheatActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_cheat);
+		if (savedInstanceState != null) 
+		{
+				mIsCheater = savedInstanceState.getBoolean(KEY_CHEAT);
+		}
 		
-		setAnswerisShown(false);
+		setAnswerisShown();
 		
 		mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
 		
@@ -50,9 +56,17 @@ public class CheatActivity extends Activity
 				{
 					mAnswerTextView.setText(R.string.false_button);
 				}
-				setAnswerisShown(true);
+				mIsCheater = true;
+				setAnswerisShown();
 			}
 		});
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) 
+	{
+		super.onSaveInstanceState(savedInstanceState);
+		savedInstanceState.putBoolean(KEY_CHEAT, mIsCheater);
 	}
 
 }
